@@ -1,0 +1,15 @@
+<h1 class="directory"><a href="<%= File.expand_path File.join(@directory, "..") %>"><%= @directory %></a></h1>
+<ul class="contents">
+	<% Dir[File.join(@path, '*')].each do |file| %>
+		<li>
+			<a href="<%= File.join(@directory, File.basename(file)) %>">
+				<span class="entry <%= File.directory?(file) ? "folder" : "file" %>">
+					<span class="filename"><%= File.basename file %></span>
+					<ul class="attributes">
+						<li class="attribute"><%= size_of(file) %></li>
+					</ul>
+				</span>
+			</a>
+		</li>
+	<% end %>
+</ul>
