@@ -1,3 +1,8 @@
+#Clerk
+Just for browsing files on a server.
+
+###Quick Start:
+
 ```bash
 bundle install
 rake db:migrate
