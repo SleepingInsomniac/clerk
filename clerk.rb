@@ -3,9 +3,9 @@ require "sinatra/activerecord"
 
 class ClerkApp < Sinatra::Base
   
+  set :files_root, './files'
   enable :sessions
   enable :logging
-  set :root, './public/root'
   set :views, './views'
   set :public_folder, './public'
   
@@ -35,12 +35,39 @@ class ClerkApp < Sinatra::Base
   
   Dir['models/*.rb'].each { |m| load m }
   
+  def require_login
+    if params[:token]
+      user = User.find_by(token: params[:token])
+      halt 401, 'What are you Token?' unless user
+    else
+      redirect '/users/login' unless session[:user_id]
+    end
+  end
+  
+  get '/users/login' do
+    erb :login
+  end
+
+  post '/users/login' do
+    user = User.find_by name: params[:user][:name]
+  
+    if user.authenticate(params[:user][:password])
+      session[:user_id] = user.id
+      status 302
+      redirect '/'
+    else
+      erb :login
+    end
+  end
+  
   get '*' do |directory|
     @directory = directory
-    @path = File.join(settings.root, @directory)
+    @path = File.join(settings.files_root, @directory)
     not_found unless File.exist? @path
     
     if File.directory?(@path)
+      require_login
+      
       if params[:json]
         {
           @directory => Dir[File.join(@path, "*")].collect do |f|
@@ -58,10 +85,6 @@ class ClerkApp < Sinatra::Base
       send_file @path
     end
   end
-  
-  # get // do
-  #   erb request.path_info.to_sym rescue pass
-  # end
   
   not_found do
     erb :error_404

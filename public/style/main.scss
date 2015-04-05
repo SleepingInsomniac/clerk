@@ -84,16 +84,16 @@ ul.attributes {
 	}
 }
 
-input[type=button] {
-	float: right;
+input[type=submit], input[type=button] {
 	background-color: #444;
 	color: #FFF;
 	border: none;
-	border-radius: 50%/50%;
+	border-radius: 3px;
 	vertical-align: middle;
 	text-align: center;
 	min-width: 20px;
 	min-height: 20px;
+	padding: 5px 10px;
 
 	&:hover {
 		cursor: pointer;
@@ -106,8 +106,10 @@ input[type=text], input[type=password] {
 	background-color: #F1F1F1;
 	padding: 5px 10px;
 	
-	&:active {
+	&:focus {
 		outline: none;
-		box-shadow: 0 0 10px rgba(255,255,0,0.3);
+		background-color: white;
+		border: 1px solid #F1F1F1;
+		box-shadow: 0 0 4px rgba(0,138,153,1);
 	}
 }
