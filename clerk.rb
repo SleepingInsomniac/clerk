@@ -1,5 +1,6 @@
 require 'sinatra/base'
 require "sinatra/activerecord"
+require 'filemagic'
 
 class ClerkApp < Sinatra::Base
   
@@ -82,6 +83,7 @@ class ClerkApp < Sinatra::Base
         erb :index
       end
     else
+      headers 'Content-Type' => FileMagic.new(FileMagic::MAGIC_MIME).file(@path)
       send_file @path
     end
   end
